@@ -111,7 +111,7 @@ environment variables for any shared deployment.
 ## Project structure
 
 ```text
-interview/
+project/
 |-- client/
 |   |-- src/
 |   |   |-- components/
