@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Admin {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String
+  email        String   @unique
+  passwordHash String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  events       Event[]
+}
+
+model Event {
+  id              String      @id @default(uuid()) @db.Uuid
+  title           String      @unique
+  seedKey         String?     @unique
+  summary         String      @default("")
+  description     String      @default("")
+  category        String      @default("")
+  requiredSkills  String[]    @default([])
+  interests       String[]    @default([])
+  bannerUrl       String?
+  eventDate       DateTime?   @db.Date
+  startTime       String      @default("")
+  endTime         String?
+  timezone        String      @default("UTC")
+  location        String      @default("")
+  isOnline        Boolean     @default(false)
+  registrationUrl String      @default("")
+  status          EventStatus @default(DRAFT)
+  createdById     String?     @db.Uuid
+  createdBy       Admin?      @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([category])
+  @@index([eventDate])
+  @@index([isOnline])
+  @@index([status])
+  @@index([createdById])
+  @@index([eventDate, isOnline])
+}
