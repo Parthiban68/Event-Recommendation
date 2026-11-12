@@ -4,7 +4,7 @@ import { sessionMaxAgeMs } from "../utils/auth";
 
 const baseOptions: CookieOptions = {
   secure: isProduction,
-  sameSite: "lax",
+  sameSite: "none",
   path: "/",
 };
 
